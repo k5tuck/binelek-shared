@@ -29,14 +29,9 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --configuration Release
     
-    - name: Test
-      run: dotnet test --no-build --configuration Release --verbosity normal --logger "trx;LogFileName=test-results.trx"
-    
-    - name: Publish Test Results
-      uses: EnricoMi/publish-unit-test-result-action@v2
-      if: always()
-      with:
-        files: '**/test-results.trx'
+    # Skip tests for now - no test projects copied yet
+    # - name: Test
+    #   run: dotnet test --no-build --configuration Release --verbosity normal
   
   publish-packages:
     runs-on: ubuntu-latest
@@ -59,10 +54,3 @@ jobs:
         --source https://nuget.pkg.github.com/k5tuck/index.json \
         --api-key ${{ secrets.GITHUB_TOKEN }} \
         --skip-duplicate
-    
-    # Optional: Publish to NuGet.org (uncomment if you want public packages)
-    # - name: Publish to NuGet.org
-    #   run: dotnet nuget push ./nupkgs/*.nupkg \
-    #     --source https://api.nuget.org/v3/index.json \
-    #     --api-key ${{ secrets.NUGET_API_KEY }} \
-    #     --skip-duplicate
