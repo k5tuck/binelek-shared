@@ -42,12 +42,8 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     
-    - name: Get version from tag
-      id: get_version
-      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
-    
     - name: Pack
-      run: dotnet pack --configuration Release --output ./nupkgs -p:PackageVersion=${{ steps.get_version.outputs.VERSION }}
+      run: dotnet pack --configuration Release --output ./nupkgs -p:PackageVersion=1.0.0-beta.1
     
     - name: Publish to GitHub Packages
       run: |
