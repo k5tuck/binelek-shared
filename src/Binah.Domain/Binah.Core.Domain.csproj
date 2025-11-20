@@ -4,6 +4,17 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- NuGet Package Metadata -->
+    <PackageId>Binah.Domain</PackageId>
+    <Authors>Binelek</Authors>
+    <Company>Binelek</Company>
+    <Description>Domain models, value objects, and GraphQL dynamic schema builder for Binah platform</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/k5tuck/binelek-shared</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/k5tuck/binelek-shared</PackageProjectUrl>
+    <PackageTags>binah;domain;models;graphql</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

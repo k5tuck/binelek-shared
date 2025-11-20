@@ -5,6 +5,17 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Binah.Contracts</RootNamespace>
+
+    <!-- NuGet Package Metadata -->
+    <PackageId>Binah.Contracts</PackageId>
+    <Authors>Binelek</Authors>
+    <Company>Binelek</Company>
+    <Description>DTOs, events, interfaces, and Kafka topic definitions for Binah platform services</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/k5tuck/binelek-shared</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/k5tuck/binelek-shared</PackageProjectUrl>
+    <PackageTags>binah;contracts;dtos;events;kafka</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

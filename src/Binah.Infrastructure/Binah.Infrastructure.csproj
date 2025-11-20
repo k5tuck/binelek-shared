@@ -3,6 +3,17 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- NuGet Package Metadata -->
+    <PackageId>Binah.Infrastructure</PackageId>
+    <Authors>Binelek</Authors>
+    <Company>Binelek</Company>
+    <Description>Kafka producers/consumers, multi-tenancy middleware, and infrastructure components for Binah platform</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/k5tuck/binelek-shared</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/k5tuck/binelek-shared</PackageProjectUrl>
+    <PackageTags>binah;infrastructure;kafka;multi-tenancy</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
