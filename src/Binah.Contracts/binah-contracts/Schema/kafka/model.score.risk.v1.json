@@ -1,0 +1,47 @@
+{
+  "$title": "model.score.risk.v1",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "score_id": {
+      "type": "string"
+    },
+    "model_id": {
+      "type": "string"
+    },
+    "model_version": {
+      "type": "string"
+    },
+    "node_uid": {
+      "type": "string"
+    },
+    "node_label": {
+      "type": "string"
+    },
+    "score": {
+      "type": "object",
+      "properties": {
+        "score_value": {
+          "type": "number"
+        },
+        "bucket": {
+          "type": "string"
+        },
+        "explanation": {
+          "type": "object"
+        }
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "score_id",
+    "model_id",
+    "node_uid",
+    "score",
+    "created_at"
+  ]
+}

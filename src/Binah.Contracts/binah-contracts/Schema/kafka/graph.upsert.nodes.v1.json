@@ -1,0 +1,58 @@
+{
+  "$title": "graph.upsert.nodes.v1",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "op_id": {
+      "type": "string"
+    },
+    "operation": {
+      "type": "string",
+      "enum": [
+        "upsert",
+        "delete"
+      ]
+    },
+    "node": {
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "properties": {
+          "type": "object"
+        },
+        "source_records": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string"
+              },
+              "source_id": {
+                "type": "string"
+              },
+              "ingest_ts": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "confidence": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "op_id",
+    "operation",
+    "node"
+  ],
+  "additionalProperties": false
+}

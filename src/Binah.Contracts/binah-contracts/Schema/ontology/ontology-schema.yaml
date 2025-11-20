@@ -1,0 +1,219 @@
+# Binah Real Estate Ontology (AL)
+version: "1.0"
+namespace: "binah.realestate"
+description: "Canonical ontology for real-estate knowledge graph"
+
+types:
+  - name: Property
+    label: Property
+    description: "Parcel / Property asset"
+    key: uid
+    properties:
+      uid:
+        type: uuid
+        required: true
+        description: "Canonical property uuid"
+      parcel_id:
+        type: string
+        required: false
+        description: "County parcel / APN"
+      address:
+        type: object
+        properties:
+          formatted: {type: string}
+          street: {type: string}
+          city: {type: string}
+          state: {type: string}
+          zip: {type: string}
+        description: "Normalized address object"
+      coordinates:
+        type: geo_point
+        required: false
+      boundary:
+        type: geo_shape
+        description: "Polygon (WKT/GeoJSON referenced to object store or inline)"
+      use_type:
+        type: keyword
+        values: ["residential","commercial","industrial","land","mixed"]
+      sqft: {type: number}
+      lot_sqft: {type: number}
+      assessed_value: {type: number}
+      market_value: {type: number}
+      last_sale:
+        type: object
+        properties:
+          price: {type: number}
+          date: {type: date}
+      zoning_code: {type: string}
+      utilities:
+        type: array
+        items: {type: string}
+      status:
+        type: keyword
+        values: ["active","offmarket","pending","distressed","archived"]
+      source_records:
+        type: array
+        items:
+          type: object
+          properties:
+            source: {type: string}
+            source_id: {type: string}
+            ingest_ts: {type: date}
+            confidence: {type: number}
+      created_at: {type: date}
+      updated_at: {type: date}
+    indexes:
+      - name: idx_property_parcelid
+        fields: ["parcel_id"]
+      - name: idx_property_coords
+        fields: ["coordinates"]
+
+  - name: Entity
+    label: Entity
+    description: "Legal / corporate entity"
+    key: uid
+    properties:
+      uid: {type: uuid}
+      name: {type: string}
+      aliases: {type: array, items: {type: string}}
+      ein_tax_id: {type: string}
+      jurisdiction: {type: string}
+      entity_type:
+        type: keyword
+        values: ["llc","corp","trust","individual","reit","bank","other"]
+      registered_address: {type: object}
+      portfolio_value: {type: number}
+      num_properties_owned: {type: integer}
+      control_score: {type: number}
+      source_records: {type: array}
+      created_at: {type: date}
+      updated_at: {type: date}
+    indexes:
+      - name: idx_entity_ein
+        fields: ["ein_tax_id"]
+      - name: idx_entity_name
+        fields: ["name"]
+
+  - name: Person
+    label: Person
+    description: "Natural person node (sensitive PII controlled)"
+    key: uid
+    properties:
+      uid: {type: uuid}
+      full_name: {type: string}
+      first_name: {type: string}
+      last_name: {type: string}
+      roles: {type: array, items: {type: string}}
+      contacts: {type: object}
+      credentials: {type: array}
+      source_records: {type: array}
+      created_at: {type: date}
+      updated_at: {type: date}
+    pii: true
+    pii_controls:
+      encryption: ["contacts"]
+      access_control: ["role:investigator","role:compliance"]
+
+  - name: Zone
+    label: Zone
+    description: "Spatial zone (census tract, zoning polygon)"
+    key: uid
+    properties:
+      uid: {type: uuid}
+      name: {type: string}
+      boundary: {type: geo_shape}
+      zoning_type: {type: string}
+      demographics: {type: object}
+      growth_rate: {type: number}
+      risk_scores: {type: object}
+      created_at: {type: date}
+      updated_at: {type: date}
+
+  - name: Document
+    label: Document
+    description: "Stored document (deed, permit, loan doc)"
+    key: uid
+    properties:
+      uid: {type: uuid}
+      document_type:
+        type: keyword
+        values: ["permit","deed","loan","appraisal","contract","other"]
+      document_id: {type: string}
+      file_url: {type: string}
+      text_embedding_id: {type: string}
+      extracted_fields: {type: object}
+      status: {type: string}
+      issued_to: {type: uuid}
+      issued_for: {type: uuid}
+      source_records: {type: array}
+      created_at: {type: date}
+      updated_at: {type: date}
+    indexes:
+      - name: idx_document_docid
+        fields: ["document_id"]
+
+edges:
+  - name: OWNS
+    from: Property
+    to: Entity
+    properties:
+      ownership_pct: {type: number}
+      since_date: {type: date}
+      source_records: {type: array}
+      confidence: {type: number}
+  - name: FINANCED_BY
+    from: Property
+    to: Entity
+    properties:
+      loan_amount: {type: number}
+      rate: {type: number}
+      lien_position: {type: integer}
+      maturity_date: {type: date}
+      source_records: {type: array}
+  - name: LOCATED_IN
+    from: Property
+    to: Zone
+    properties:
+      contains: {type: boolean}
+      distance_meters: {type: number}
+  - name: ADJACENT_TO
+    from: Property
+    to: Property
+    properties:
+      boundary_length_m: {type: number}
+  - name: HAS_PERMIT
+    from: Property
+    to: Document
+    properties:
+      permit_status: {type: string}
+      value: {type: number}
+  - name: DEVELOPED_BY
+    from: Property
+    to: Entity
+    properties:
+      project_name: {type: string}
+      completion_date: {type: date}
+  - name: CONTROLS
+    from: Entity
+    to: Entity
+    properties:
+      control_pct: {type: number}
+      control_type: {type: string}
+  - name: PRINCIPAL
+    from: Entity
+    to: Person
+    properties:
+      role: {type: string}
+      appointed_date: {type: date}
+  - name: RELATED_TO
+    from: "*"
+    to: "*"
+    properties:
+      relationship_type: {type: string}
+      extracted_confidence: {type: number}
+
+metadata:
+  provenance:
+    required: true
+    description: "All nodes/edges must include a source_records array."
+  schema_version: "1.0"
