@@ -46,8 +46,11 @@ public class RequestTimingMiddleware
                 stopwatch.ElapsedMilliseconds,
                 correlationId);
 
-            // Add timing header to response
-            context.Response.Headers.Add("X-Response-Time-Ms", stopwatch.ElapsedMilliseconds.ToString());
+            // Add timing header to response only if not already started
+            if (!context.Response.HasStarted)
+            {
+                context.Response.Headers.Add("X-Response-Time-Ms", stopwatch.ElapsedMilliseconds.ToString());
+            }
         }
     }
 
